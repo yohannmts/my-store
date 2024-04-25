@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1>Votre Panier</h1>
+        <p class="lead">Prix total du panier : <strong>{{ total_price|floatformat:2 }} €</strong></p>
+    </div>
+
+    <div class="row">
+        {% for order in orders %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{ order.product.thumbnail.url }}" alt="{{ order.product.name }}" class="img-fluid">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ order.product.name }}</h5>
+                            <p class="card-text">Quantité : {{ order.quantity }}</p>
+                            <p class="card-text">Prix unitaire : {{ order.product.price|floatformat:2 }} €</p>
+                            <p class="card-text">Prix total : {{ order.product.price|multiply:order.quantity|floatformat:2 }} €</p>
+                            <a href="{% url 'remove-from-cart' order.id %}" class="btn btn-sm btn-danger">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'delete-cart' %}" class="btn btn-danger">Vider le panier</a>
+    </div>
+</div>
+
+{% endblock %}
